@@ -17,6 +17,10 @@ var Config ConfigModel
 // Loads configuration from Environment and .env file
 // .env overwrites the Environment
 func LoadConfig() {
+	// Set defaults
+	Config.Host = "127.0.0.1"
+	Config.Port = "1337"
+
 	viper.AutomaticEnv()
 	viper.SetConfigFile(".env")
 	viper.SetConfigType("env")

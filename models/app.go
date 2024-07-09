@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/broemp/sshChat/chat"
+	"github.com/broemp/sshChat/config"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/log"
 	"github.com/charmbracelet/ssh"
@@ -19,20 +20,16 @@ import (
 	"github.com/muesli/termenv"
 )
 
-const (
-	host = "localhost"
-	port = "23234"
-)
-
+// Users that need to have their key checked
 var users = map[string]string{
-	"broemp": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPneKBhbjx1rVlhaNehDGsOBAh5r0vupuyTyQ+luSOVw ",
+	"broemp": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPneKBhbjx1rVlhaNehDGsOBAh5r0vupuyTyQ+luSOVw",
 }
 
 func NewApp() *App {
 	a := new(App)
 	a.messageHandler = chat.NewMessageHandler()
 	s, err := wish.NewServer(
-		wish.WithAddress(net.JoinHostPort(host, port)),
+		wish.WithAddress(net.JoinHostPort(config.Config.Host, config.Config.Port)),
 		wish.WithHostKeyPath(".ssh/id_ed25519"),
 		wish.WithPublicKeyAuth(func(ctx ssh.Context, key ssh.PublicKey) bool {
 			return key.Type() == "ssh-ed25519"
@@ -69,7 +66,7 @@ func (a *App) Start() {
 	var err error
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
-	log.Info("Starting SSH server", "host", host, "port", port)
+	log.Info("Starting SSH server", "host", config.Config.Host, "port", config.Config.Port)
 	go func() {
 		if err = a.ListenAndServe(); err != nil {
 			log.Error("Could not start server", "error", err)

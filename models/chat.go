@@ -18,20 +18,14 @@ type (
 	errMsg error
 )
 
-var (
-	titleStyle = func() lipgloss.Style {
-		b := lipgloss.RoundedBorder()
-		b.Right = "├"
-		return lipgloss.NewStyle().BorderStyle(b).Padding(0, 1)
-	}()
+var titleStyle = func() lipgloss.Style {
+	b := lipgloss.RoundedBorder()
+	b.Right = "├"
+	return lipgloss.NewStyle().BorderStyle(b).Padding(0, 1)
+}()
 
-	textinputStyle = func() lipgloss.Style {
-		b := lipgloss.RoundedBorder()
-		b.Right = "├"
-		return lipgloss.NewStyle().BorderStyle(b).Padding(0, 1)
-	}()
-)
-
+// This model keeps the state for a connection
+// The struct implements the functions Init,View and Update
 type chatModel struct {
 	app         *App
 	quit        bool
@@ -49,6 +43,10 @@ type chatModel struct {
 	err   error
 }
 
+// Initializes the model for the wish server.
+// If quit is true the session is quit instantly
+// This is a workaround, since quiting in the wish connection still runs the chat after
+// Ref: https://github.com/charmbracelet/wish/discussions/163
 func InitializeChatModel(quit bool) chatModel {
 	ti := textinput.New()
 	ti.Placeholder = "Send a message..."
@@ -158,13 +156,6 @@ func (m chatModel) helpView() string {
 func (m chatModel) textinputView() string {
 	line := strings.Repeat("─", max(0, m.viewport.Width))
 	return lipgloss.JoinVertical(lipgloss.Left, line, m.textinput.View())
-}
-
-func (m chatModel) handleCommand(cmd string) string {
-	switch cmd {
-	case "/msg":
-	}
-	return ""
 }
 
 // Helpers

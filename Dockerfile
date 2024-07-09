@@ -10,6 +10,6 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o sshChat
 FROM scratch
 
 WORKDIR /app
-COPY --from=builder ./sshChat .
+COPY --from=builder /app/sshChat .
 
 ENTRYPOINT [ "./sshChat" ]

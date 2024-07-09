@@ -27,5 +27,5 @@ docker build . -t [USERNAME]/ssh_chat:[VERSION]
 
 # e.g.
 docker build . -t broemp/ssh_chat:dev
-docker run -e HOST=127.0.0.1 -e PORT=1337 -p 1337:1337 --name= sshChat -d broemp/ssh_chat:dev
+docker run -e HOST=127.0.0.1 -e PORT=1337 -p 1337:1337 --name sshChat -d broemp/ssh_chat:dev
 ```
